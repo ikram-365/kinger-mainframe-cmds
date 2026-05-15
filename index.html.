@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>C&A SYSTEM - KINGER ACCESS</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; padding: 20px; overflow: hidden; }
+        #terminal { border: 2px solid #333; height: 90vh; padding: 15px; background: rgba(0, 20, 0, 0.9); box-shadow: inset 0 0 20px #000; position: relative; overflow-y: auto; }
+        .glitch { color: #ff0000; animation: shake 0.1s infinite; text-shadow: 2px 2px #550000; }
+        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
+        .input-line { display: flex; margin-top: 10px; }
+        input { background: transparent; border: none; color: #00ff41; font-family: inherit; font-size: 16px; outline: none; width: 100%; }
+        .header { color: #fff; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div class="header">C&A Mainframe v2.0.4 - [SECURE_CORE_01]</div>
+        <div id="logs">
+            <div>(load "Caine-core.lisp") ... [OK]</div>
+            <div>(defun find-exit () (nil)) ... [WARNING]</div>
+            <div class="glitch">ALERT: CAINE_DETECTION_RISK_HIGH</div>
+            <div style="color: yellow;">STATUS: Emergency Lockdown Initiated by Admin 'Caine'</div>
+            <div>--------------------------------------------------</div>
+            <div>PLEASE ENTER PASSWORD TO BYPASS LOCKDOWN:</div>
+        </div>
+        <div class="input-line">
+            <span>KINGER@ROOT:~$ </span>
+            <input type="password" id="cmdInput" autofocus autocomplete="off">
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('cmdInput');
+        const logs = document.getElementById('logs');
+        const terminal = document.getElementById('terminal');
+        let authenticated = false;
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const val = input.value.trim();
+                input.value = '';
+                const newLine = document.createElement('div');
+
+                if (!authenticated) {
+                    if (val === 'queenie123') {
+                        authenticated = true;
+                        input.type = 'text';
+                        newLine.innerHTML = `<span style="color:white;">ACCESS GRANTED. User: Programmer #001 (Kinger)</span><br>
+                                             <span>(view-logs) (find-queenie) (unlock-exit)</span>`;
+                    } else {
+                        newLine.className = 'glitch';
+                        newLine.textContent = 'ACCESS DENIED. SYSTEM CORRUPTED.';
+                    }
+                } else {
+                    newLine.textContent = `KINGER@ROOT:~$ ${val}`;
+                    const res = document.createElement('div');
+                    if (val === 'view-logs') res.innerHTML = `[LOG] Queenie Status: ABSTRACTION<br>[LOG] Caine-core.lisp location: THE VOID`;
+                    else if (val === 'find-queenie') res.innerHTML = `<span class="glitch">ERROR: PARTITION NOT FOUND. SEARCHING VOID...</span>`;
+                    else if (val === 'unlock-exit') res.innerHTML = `CAINE: "Why do you want to leave, Kinger? Isn't it wonderful here?"`;
+                    else res.textContent = "Unknown LISP Command.";
+                    newLine.appendChild(res);
+                }
+                logs.appendChild(newLine);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
+
